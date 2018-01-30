@@ -2,14 +2,21 @@ const gkm = require('gkm')
 const request = require('request')
 const pw = require('./password')
 
+const maxCounts = 1000
 let keydowns = 0
 let clicks = 0
 gkm.events.on('key.pressed', function() {
   keydowns++
+  if (keydowns >= maxCounts) {
+    sendRequest()
+  }
 })
 
 gkm.events.on('mouse.pressed', function() {
   clicks++
+  if (clicks >= maxCounts) {
+    sendRequest()
+  }
 })
 
 var isSent = false
@@ -48,6 +55,8 @@ function updateForm() {
 }
 function sendRequest() {
   return new Promise((resolve, reject) => {
+    updateForm()
+    clear()
     console.log('sending...')
     request(options, function(error, response, body) {
       if (error) {
@@ -57,4 +66,9 @@ function sendRequest() {
       }
     })
   })
+}
+
+function clear() {
+  keydowns = 0
+  clicks = 0
 }
