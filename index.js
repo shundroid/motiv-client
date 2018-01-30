@@ -1,23 +1,23 @@
-var gkm = require('gkm');
+const gkm = require('gkm')
 const request = require('request')
-var pw = require('./password');
+const pw = require('./password')
 
-let keydowns = 0;
-let clicks = 0;
+let keydowns = 0
+let clicks = 0
 gkm.events.on('key.pressed', function() {
-  keydowns++;
-});
+  keydowns++
+})
 
 gkm.events.on('mouse.pressed', function() {
-  clicks++;
-});
+  clicks++
+})
 
-var isSent = false;
-process.stdin.resume();
+var isSent = false
+process.stdin.resume()
 function exitHandler() {
   if (!isSent) {
     console.log('exiting...');
-    isSent = true;
+    isSent = true
     updateForm()
     sendRequest().then(() => {
       process.exit()
@@ -28,18 +28,11 @@ function exitHandler() {
   }
 }
 
-//do something when app is closing
-process.on('exit', exitHandler);
-
-//catches ctrl+c event
-process.on('SIGINT', exitHandler);
-
-// catches "kill pid" (for example: nodemon restart)
-process.on('SIGUSR1', exitHandler);
-process.on('SIGUSR2', exitHandler);
-
-//catches uncaught exceptions
-process.on('uncaughtException', exitHandler);
+process.on('exit', exitHandler)
+process.on('SIGINT', exitHandler)
+process.on('SIGUSR1', exitHandler)
+process.on('SIGUSR2', exitHandler)
+process.on('uncaughtException', exitHandler)
 
 const headers = { 'Content-Type': 'application/json' }
 const options = {
