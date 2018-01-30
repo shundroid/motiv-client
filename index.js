@@ -1,5 +1,5 @@
 var gkm = require('gkm');
-var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
+const request = require('request')
 var pw = require('./password');
 
 let keydowns = 0;
@@ -18,12 +18,14 @@ function exitHandler() {
   if (!isSent) {
     console.log('exiting...');
     isSent = true;
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'https://script.google.com/macros/s/AKfycbz0ZAT-X7UctEiwTEsnTqRwqBOnjeX6SRA3Ob0tI-XBamx89Ms/exec', false)
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.send('password=' + pw + '&keydowns=' + keydowns + '&clicks=' + clicks);
+    updateForm()
+    sendRequest().then(() => {
+      process.exit()
+    }, err => {
+      console.log(err)
+      process.exit()
+    })
   }
-  process.exit();
 }
 
 //do something when app is closing
@@ -38,3 +40,28 @@ process.on('SIGUSR2', exitHandler);
 
 //catches uncaught exceptions
 process.on('uncaughtException', exitHandler);
+
+const headers = { 'Content-Type': 'application/json' }
+const options = {
+  url: 'https://script.google.com/macros/s/AKfycbz0ZAT-X7UctEiwTEsnTqRwqBOnjeX6SRA3Ob0tI-XBamx89Ms/exec',
+  method: 'POST',
+  headers,
+  json: true,
+  form: { password: pw, keydowns, clicks }
+}
+function updateForm() {
+  options.form.keydowns = keydowns
+  options.form.clicks = clicks
+}
+function sendRequest() {
+  return new Promise((resolve, reject) => {
+    console.log('sending...')
+    request(options, function(error, response, body) {
+      if (error) {
+        reject(error)
+      } else {
+        resolve()
+      }
+    })
+  })
+}
