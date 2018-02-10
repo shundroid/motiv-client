@@ -13,6 +13,7 @@ The client of motiv implemented by Node.js
 
 ```
 $ git clone https://github.com/shundroid/motiv-client-node.git
+$ npm install
 ```
 
 ### Settings
@@ -23,6 +24,24 @@ preferences.js
 ```js
 module.exports = { server: 'Your server url', password: 'Your password' }
 ```
+
+### Run
+
+```
+$ node index
+```
+
+### Or make exe
+
+Using [nexe](https://github.com/nexe/nexe)
+```
+$ cat index.js | nexe
+```
+
+### Register to startup (Windows)
+
+Make a shortcut that runs `node <path>/build.js`.
+Move it to `shell:startup`.
 
 ## Links
 
