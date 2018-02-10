@@ -1,6 +1,6 @@
 const gkm = require('gkm')
 const request = require('request')
-const pw = require('./password')
+const preferences = require('./preferences')
 
 const maxCounts = 1000
 let keydowns = 0
@@ -43,11 +43,11 @@ process.on('uncaughtException', exitHandler)
 
 const headers = { 'Content-Type': 'application/json' }
 const options = {
-  url: 'https://script.google.com/macros/s/AKfycbz0ZAT-X7UctEiwTEsnTqRwqBOnjeX6SRA3Ob0tI-XBamx89Ms/exec',
+  url: preferences.server,
   method: 'POST',
   headers,
   json: true,
-  form: { password: pw, keydowns, clicks }
+  form: { password: preferences.password, keydowns, clicks }
 }
 function updateForm() {
   options.form.keydowns = keydowns
